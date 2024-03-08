@@ -1,0 +1,1 @@
+Åbn scenen "VoxelWorld" for at anvende programmet
