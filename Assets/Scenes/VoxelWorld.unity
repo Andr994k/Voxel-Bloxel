@@ -856,6 +856,37 @@ MonoBehaviour:
   noiseDomainY: {fileID: 11400000, guid: 032658e760857e146bbe0693f6b52612, type: 2}
   amplitudeX: 80
   amplitudeY: 80
+--- !u!1 &1021455950
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1021455951}
+  m_Layer: 0
+  m_Name: GameManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1021455951
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1021455950}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -21.610834, y: 50.806015, z: -6.432978}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1367179794
 GameObject:
   m_ObjectHideFlags: 0
@@ -1248,3 +1279,4 @@ SceneRoots:
   - {fileID: 1378150911}
   - {fileID: 1623884224}
   - {fileID: 2030670227}
+  - {fileID: 1021455951}

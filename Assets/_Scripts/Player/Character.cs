@@ -22,7 +22,7 @@ public class Character : MonoBehaviour
 
     bool isWaiting = false;
 
-    public World world;
+    //public World world;
 
     private void Awake()
     {
@@ -30,7 +30,7 @@ public class Character : MonoBehaviour
             mainCamera = Camera.main;
         playerInput = GetComponent<PlayerInput>();
         playerMovement = GetComponent<PlayerMovement>();
-        world = FindObjectOfType<World>();
+        //world = FindObjectOfType<World>();
     }
 
     private void Start()
