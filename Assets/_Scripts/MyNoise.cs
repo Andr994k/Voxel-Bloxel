@@ -4,6 +4,7 @@ using UnityEngine;
 
 public static class MyNoise
 {
+    static int seed = Random.Range(0, 100000);
 
     public static float RemapValue01(float value, float outputMin, float outputMax)
     {

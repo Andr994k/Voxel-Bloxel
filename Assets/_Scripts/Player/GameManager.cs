@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour
 
     public World world;
 
+    //How often we check for new chunks to be loaded
     public float detectionTime = 1;
     public CinemachineVirtualCamera camera_VM;
 
