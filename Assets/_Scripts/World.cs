@@ -136,7 +136,7 @@ public class World : MonoBehaviour
 
     internal bool SetBlock(RaycastHit hit, BlockType blockType)
     {
-        Debug.Log(hit.transform);
+        Debug.Log(hit.point);
 
         ChunkRenderer chunk = hit.collider.GetComponent<ChunkRenderer>();
         if (chunk == null)
@@ -145,14 +145,50 @@ public class World : MonoBehaviour
         
 
         Vector3Int pos = GetBlockPos(hit);
-        //Debug.Log(pos);
+        
         if (blockType == BlockType.Air)
         {
             WorldDataHelper.SetBlock(chunk.ChunkData.worldReference, pos, blockType);
         }
         else
         {
-            WorldDataHelper.SetBlock(chunk.ChunkData.worldReference, pos, blockType);
+            if (hit.point[0] == pos[0] + 0.5)
+            {
+                Debug.Log("x");
+                Vector3Int newpos = new Vector3Int(pos.x + 1, pos.y, pos.z);
+                WorldDataHelper.SetBlock(chunk.ChunkData.worldReference, newpos, blockType);
+            }
+            if (hit.point[1] == pos[1] + 0.5)
+            {
+                Debug.Log("y");
+                Vector3Int newpos = new Vector3Int(pos.x, pos.y + 1, pos.z);
+                WorldDataHelper.SetBlock(chunk.ChunkData.worldReference, newpos, blockType);
+            }
+            if (hit.point[2] == pos[2] + 0.5)
+            {
+                Debug.Log("z");
+                Vector3Int newpos = new Vector3Int(pos.x, pos.y, pos.z + 1);
+                WorldDataHelper.SetBlock(chunk.ChunkData.worldReference, newpos, blockType);
+            }
+            if (hit.point[0] == pos[0] - 0.5)
+            {
+                Debug.Log("-x");
+                Vector3Int newpos = new Vector3Int(pos.x - 1, pos.y, pos.z);
+                WorldDataHelper.SetBlock(chunk.ChunkData.worldReference, newpos, blockType);
+            }
+            if (hit.point[1] == pos[1] - 0.5)
+            {
+                Debug.Log("-y");
+                Vector3Int newpos = new Vector3Int(pos.x, pos.y - 1, pos.z);
+                WorldDataHelper.SetBlock(chunk.ChunkData.worldReference, newpos, blockType);
+            }
+            if (hit.point[2] == pos[2] - 0.5)
+            {
+                Debug.Log("-z");
+                Vector3Int newpos = new Vector3Int(pos.x, pos.y, pos.z - 1);
+                WorldDataHelper.SetBlock(chunk.ChunkData.worldReference, newpos, blockType);
+            }
+            
         }
             
 
