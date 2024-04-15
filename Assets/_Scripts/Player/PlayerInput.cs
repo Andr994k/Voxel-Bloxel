@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class PlayerInput : MonoBehaviour
 {
-    public event Action OnMouseClick, OnFly;
+    public event Action OnLeftMouseClick, OnRightMouseClick, OnFly;
     //get; private set; makes the variable publicly readable, but dissallows editing from outside the class of which it is contained in
     //This means that only PlayerInput can change the value of it
     public bool RunningPressed { get; private set; }
@@ -26,8 +26,11 @@ public class PlayerInput : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
-            OnMouseClick?.Invoke();
-
+            OnLeftMouseClick?.Invoke();
+        }
+        if (Input.GetMouseButtonDown(1))
+        {
+            OnRightMouseClick?.Invoke();
         }
     }
     private void GetMousePosition()

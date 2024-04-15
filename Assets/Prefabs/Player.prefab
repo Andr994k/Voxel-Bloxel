@@ -286,7 +286,7 @@ MonoBehaviour:
   controller: {fileID: 0}
   playerWalkSpeed: 5
   playerRunSpeed: 8
-  jumpHeight: 6
+  jumpHeight: 4
   gravityValue: -9.81
   flySpeed: 2
   groundMask:
@@ -314,3 +314,4 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8
   fly: 0
+  world: {fileID: 0}

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +17,8 @@ public class ChunkRenderer : MonoBehaviour
     public bool showGizmo = false;
 
     public ChunkData ChunkData { get; private set; }
+
+    public bool ModifiedByThePlayer;
 
 
     private void Awake()
@@ -54,6 +57,10 @@ public class ChunkRenderer : MonoBehaviour
     {
         RenderMesh(data);
     }
+    public void UpdateChunk()
+    {
+        RenderMesh(Chunk.GetChunkMeshData(ChunkData));
+    }
 #if UNITY_EDITOR
     private void OnDrawGizmos()
     {
@@ -70,5 +77,7 @@ public class ChunkRenderer : MonoBehaviour
             }
         }
     }
+
+
 #endif
 }
