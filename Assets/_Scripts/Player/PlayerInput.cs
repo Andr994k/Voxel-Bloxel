@@ -24,7 +24,7 @@ public class PlayerInput : MonoBehaviour
     }
     private void GetMouseClick()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButton(0))
         {
             OnLeftMouseClick?.Invoke();
         }

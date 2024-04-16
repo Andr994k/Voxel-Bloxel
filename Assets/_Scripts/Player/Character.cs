@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class Character : MonoBehaviour
 {
@@ -14,6 +15,8 @@ public class Character : MonoBehaviour
     public float interactionRayLength = 5;
 
     public LayerMask groundMask;
+
+    private BlockType activeBlock = BlockType.Dirt;
 
 
     public bool fly = false;
@@ -71,6 +74,31 @@ public class Character : MonoBehaviour
 
 
         }
+        if (Input.GetKeyDown(KeyCode.Alpha0))
+        {
+            activeBlock = BlockType.Dirt;
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            activeBlock = BlockType.Stone;
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            activeBlock = BlockType.Sand;
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            activeBlock = BlockType.TreeTrunk;
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha4))
+        {
+            activeBlock = BlockType.Grass_Dirt;
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha5))
+        {
+            activeBlock = BlockType.TreeLeavesSolid;
+        }
+
 
     }
     IEnumerator ResetWaiting()
@@ -80,13 +108,14 @@ public class Character : MonoBehaviour
         isWaiting = false;
     }
 
+
     private void HandleLeftMouseClick()
     {
         Ray playerRay = new Ray(mainCamera.transform.position, mainCamera.transform.forward);
         RaycastHit hit;
         if (Physics.Raycast(playerRay, out hit, interactionRayLength, groundMask))
         {
-            ModifyTerrain(hit, BlockType.Air);
+            StartCoroutine(DestroyBlock(hit));
         }
 
     }
@@ -96,7 +125,7 @@ public class Character : MonoBehaviour
         RaycastHit hit;
         if (Physics.Raycast(playerRay, out hit, interactionRayLength, groundMask))
         {
-            ModifyTerrain(hit, BlockType.Stone);
+            ModifyTerrain(hit, activeBlock);
         }
 
     }
@@ -105,5 +134,31 @@ public class Character : MonoBehaviour
     {
         world.SetBlock(hit, blockType);
     }
+    IEnumerator DestroyBlock(RaycastHit hit)
+    {
+        bool notDestroyed = true;
+        int counter = 0;
+        while (notDestroyed)
+        {
+            if (Input.GetMouseButton(0) && counter < 10)
+            {
+                Debug.Log("buttonpressed" + counter + "times");
+                yield return new WaitForSeconds(0.1f);
+                counter++;
+                if (counter == 10)
+                {
+                    ModifyTerrain(hit, BlockType.Air);
+                    notDestroyed = false;
+                    StopAllCoroutines();
+                }
+            }
+            else
+            {
+                notDestroyed = false;
+            }
 
+        }
+        
+        
+    }
 }
