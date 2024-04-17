@@ -21,7 +21,7 @@ public class Character : MonoBehaviour
 
     public bool fly = false;
 
-    //public Animator animator;
+    public Animator animator;
 
     bool isWaiting = false;
 
@@ -115,6 +115,7 @@ public class Character : MonoBehaviour
         RaycastHit hit;
         if (Physics.Raycast(playerRay, out hit, interactionRayLength, groundMask))
         {
+            animator.SetBool("Mining", true);
             StartCoroutine(DestroyBlock(hit));
         }
 
@@ -140,7 +141,12 @@ public class Character : MonoBehaviour
         int counter = 0;
         while (notDestroyed)
         {
-            if (Input.GetMouseButton(0) && counter < 10)
+            Ray playerRay = new Ray(mainCamera.transform.position, mainCamera.transform.forward);
+            RaycastHit hitCheck;
+            Physics.Raycast(playerRay, out hitCheck, interactionRayLength, groundMask);
+            hitCheck.point = world.GetBlockPos(hitCheck);
+            hit.point = world.GetBlockPos(hit);
+            if (Input.GetMouseButton(0) && counter < 10 && hit.point == hitCheck.point)
             {
                 Debug.Log("buttonpressed" + counter + "times");
                 yield return new WaitForSeconds(0.1f);
@@ -150,10 +156,12 @@ public class Character : MonoBehaviour
                     ModifyTerrain(hit, BlockType.Air);
                     notDestroyed = false;
                     StopAllCoroutines();
+                    animator.SetBool("Mining", false);
                 }
             }
             else
             {
+                animator.SetBool("Mining", false);
                 notDestroyed = false;
             }
 

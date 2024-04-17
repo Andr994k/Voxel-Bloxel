@@ -210,7 +210,7 @@ public class World : MonoBehaviour
         return true;
     }
 
-    private Vector3Int GetBlockPos(RaycastHit hit)
+    public Vector3Int GetBlockPos(RaycastHit hit)
     {
         Vector3 pos = new Vector3(
              GetBlockPositionIn(hit.point.x, hit.normal.x),
