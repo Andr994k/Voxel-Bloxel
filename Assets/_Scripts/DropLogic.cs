@@ -8,6 +8,7 @@ public class DropLogic : MonoBehaviour
 
     private void Awake()
     {
+
         //string block = character.currentDestroyedBlock;
     }
 
