@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.UIElements;
+using Image = UnityEngine.UI.Image;
 
 public class Character : MonoBehaviour
 {
@@ -27,6 +29,10 @@ public class Character : MonoBehaviour
 
     public World world;
 
+    public Image Healthbar;
+
+    private float currenthealth;
+
     private void Awake()
     {
         if (mainCamera == null)
@@ -38,6 +44,7 @@ public class Character : MonoBehaviour
 
     private void Start()
     {
+        currenthealth = 100;
         playerInput.OnLeftMouseClick += HandleLeftMouseClick;
         playerInput.OnRightMouseClick += HandleRightMouseClick;
         playerInput.OnFly += HandleFlyClick;
@@ -50,6 +57,7 @@ public class Character : MonoBehaviour
 
     void Update()
     {
+        Healthbar.fillAmount = currenthealth / 100f;
         if (fly)
         {
             //animator.SetFloat("speed", 0);
