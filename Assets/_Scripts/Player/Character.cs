@@ -16,7 +16,7 @@ public class Character : MonoBehaviour
 
     public LayerMask groundMask;
 
-    private BlockType activeBlock = BlockType.Dirt;
+    public BlockType activeBlock = BlockType.Dirt;
 
 
     public bool fly = false;
@@ -146,12 +146,12 @@ public class Character : MonoBehaviour
             Physics.Raycast(playerRay, out hitCheck, interactionRayLength, groundMask);
             hitCheck.point = world.GetBlockPos(hitCheck);
             hit.point = world.GetBlockPos(hit);
-            if (Input.GetMouseButton(0) && counter < 10 && hit.point == hitCheck.point)
+            if (Input.GetMouseButton(0) && counter < 3 && hit.point == hitCheck.point)
             {
                 Debug.Log("buttonpressed" + counter + "times");
-                yield return new WaitForSeconds(0.1f);
+                yield return new WaitForSeconds(0.33f);
                 counter++;
-                if (counter == 10)
+                if (counter == 3)
                 {
                     ModifyTerrain(hit, BlockType.Air);
                     notDestroyed = false;

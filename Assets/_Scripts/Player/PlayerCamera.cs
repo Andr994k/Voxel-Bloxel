@@ -17,7 +17,7 @@ public class PlayerCamera : MonoBehaviour
     private void Awake()
     {
         playerInput = GetComponentInParent<PlayerInput>();
-        playerBody = GetComponentInParent<Transform>();
+        playerBody = transform.parent;
     }
     private void Start()
     {

@@ -486,7 +486,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 61
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -1019,7 +1019,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c2b493644008cba4db43e45eff285932, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerPrefab: {fileID: 4823625100924994592, guid: 759bd1e8ef74d0e4194f12a0f4268f1a, type: 3}
+  playerPrefab: {fileID: 8934679099368258296, guid: 759bd1e8ef74d0e4194f12a0f4268f1a, type: 3}
   currentPlayerChunkPosition: {x: 0, y: 0, z: 0}
   world: {fileID: 1623884223}
   detectionTime: 1
