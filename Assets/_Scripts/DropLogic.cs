@@ -4,17 +4,22 @@ using UnityEngine;
 
 public class DropLogic : MonoBehaviour
 {
-    public Character character;
+    public GameObject dirtChild;
+    public GameObject grassChild;
+    public GameObject dsandChild;
+    public GameObject stoneChild;
 
     private void Awake()
     {
+        GameObject playerObject= GameObject.FindGameObjectWithTag("Player");
 
-        //string block = character.currentDestroyedBlock;
-    }
+        Character character = playerObject.GetComponent<Character>();
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        BlockType block = character.currentDestroyedBlock;
+
+        if (block == BlockType.Stone)
+        {
+            stoneChild.SetActive(true);
+        }
     }
 }

@@ -16,6 +16,14 @@ public class BlockSwitch : MonoBehaviour
     void Update()
     {
 
+        if (character.activeBlock == BlockType.Nothing)
+        {
+            stoneBlock.SetActive(false);
+            sandBlock.SetActive(false);
+            grassBlock.SetActive(false);
+            dirtBlock.SetActive(false);
+        }
+
         if (character.activeBlock == BlockType.Dirt) 
         {
             stoneBlock.SetActive(false);

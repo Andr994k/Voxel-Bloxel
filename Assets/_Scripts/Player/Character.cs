@@ -14,11 +14,24 @@ public class Character : MonoBehaviour
     [SerializeField]
     private PlayerMovement playerMovement;
 
+    //Destroy and place length
     public float interactionRayLength = 5;
 
     public LayerMask groundMask;
 
+    //Currently holding block
     public BlockType activeBlock = BlockType.Dirt;
+
+    //The blocktype that the player has just destroyed
+    public BlockType currentDestroyedBlock = BlockType.Stone;
+
+    //The prefab representing a block after being destroyed
+    public GameObject dropBlockPrefab;
+
+    //the images representing the different stages of a block being destroyed
+    public GameObject t1;
+    public GameObject t2;
+    public GameObject t3;
 
 
     public bool fly = false;
@@ -41,7 +54,6 @@ public class Character : MonoBehaviour
         playerMovement = GetComponent<PlayerMovement>();
         world = FindObjectOfType<World>();
     }
-
     private void Start()
     {
         currenthealth = 100;
@@ -84,7 +96,7 @@ public class Character : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.Alpha0))
         {
-            activeBlock = BlockType.Dirt;
+            activeBlock = BlockType.Nothing;
         }
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
@@ -105,6 +117,19 @@ public class Character : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Alpha5))
         {
             activeBlock = BlockType.TreeLeavesSolid;
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha6))
+        {
+            activeBlock = BlockType.Dirt;
+        }
+        if (activeBlock == BlockType.Nothing)
+        {
+            animator.SetBool("HoldingBlock", false);
+        }
+        else
+        {
+            Debug.Log(animator.GetCurrentAnimatorStateInfo(0));
+            animator.SetBool("HoldingBlock", true);
         }
 
 
@@ -149,27 +174,44 @@ public class Character : MonoBehaviour
         int counter = 0;
         while (notDestroyed)
         {
+            //check if the player is still pointing at the same block
             Ray playerRay = new Ray(mainCamera.transform.position, mainCamera.transform.forward);
             RaycastHit hitCheck;
             Physics.Raycast(playerRay, out hitCheck, interactionRayLength, groundMask);
             hitCheck.point = world.GetBlockPos(hitCheck);
+
             hit.point = world.GetBlockPos(hit);
+
+
+
+
             if (Input.GetMouseButton(0) && counter < 3 && hit.point == hitCheck.point)
             {
-                Debug.Log("buttonpressed" + counter + "times");
                 yield return new WaitForSeconds(0.33f);
                 counter++;
+                if (counter == 1)
+                {
+                    Instantiate(t1, hit.point, Quaternion.identity);
+                }
+                if (counter == 2)
+                {
+                    Instantiate(t2, hit.point, Quaternion.identity);
+                }
                 if (counter == 3)
                 {
                     ModifyTerrain(hit, BlockType.Air);
                     notDestroyed = false;
                     StopAllCoroutines();
                     animator.SetBool("Mining", false);
+                    Instantiate(dropBlockPrefab, hit.point, Quaternion.identity);
                 }
             }
             else
             {
-                animator.SetBool("Mining", false);
+                if (Input.GetMouseButton(0) == false)
+                {
+                    animator.SetBool("Mining", false);
+                }
                 notDestroyed = false;
             }
 
