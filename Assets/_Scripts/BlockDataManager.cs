@@ -13,6 +13,9 @@ public class BlockDataManager : MonoBehaviour
     {
         foreach (var item in textureData.textureDataList)
         {
+            print(textureData.textureDataList);
+            //Debug.Log(item.ToString());
+
             if (blockTextureDataDictionary.ContainsKey(item.blockType) == false)
             {
                 blockTextureDataDictionary.Add(item.blockType, item);
