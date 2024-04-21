@@ -57,7 +57,7 @@ public class Character : MonoBehaviour
 
     void Update()
     {
-        Healthbar.fillAmount = currenthealth / 100f;
+        //Healthbar.fillAmount = currenthealth / 100f;
         if (fly)
         {
             //animator.SetFloat("speed", 0);
