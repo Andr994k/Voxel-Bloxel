@@ -644,7 +644,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inventoryslots: []
-  Inventoryitemprefab: {fileID: 0}
+  Inventoryitemprefab: {fileID: 243939686616260881, guid: 9a21c12ad9e1b0c4d8cc3f0f918ad346, type: 3}
   Inv: {fileID: 1085418981}
   InvBackground: {fileID: 1424935204}
   inventoryactive: 0
@@ -3211,6 +3211,30 @@ PrefabInstance:
     - target: {fileID: 243939686616260881, guid: 9a21c12ad9e1b0c4d8cc3f0f918ad346, type: 3}
       propertyPath: m_Name
       value: Image
+      objectReference: {fileID: 0}
+    - target: {fileID: 1307628761047610957, guid: 9a21c12ad9e1b0c4d8cc3f0f918ad346, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1307628761047610957, guid: 9a21c12ad9e1b0c4d8cc3f0f918ad346, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1307628761047610957, guid: 9a21c12ad9e1b0c4d8cc3f0f918ad346, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1307628761047610957, guid: 9a21c12ad9e1b0c4d8cc3f0f918ad346, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1307628761047610957, guid: 9a21c12ad9e1b0c4d8cc3f0f918ad346, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1307628761047610957, guid: 9a21c12ad9e1b0c4d8cc3f0f918ad346, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5188556401797973347, guid: 9a21c12ad9e1b0c4d8cc3f0f918ad346, type: 3}
       propertyPath: m_Pivot.x
