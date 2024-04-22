@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using Image = UnityEngine.UI.Image;
@@ -11,6 +12,7 @@ public class Inventorysystem : MonoBehaviour
     public Dictionary<GameObject, GameObject> Inventory= new Dictionary<GameObject, GameObject>();
     List<GameObject> counters= new List<GameObject>();
     List<GameObject> Inventoryspots = new List<GameObject>();
+    List<GameObject> emptyespots = new List<GameObject>();
     GameObject Parent;
     GameObject InventorySpot;
     GameObject ItemHolding;
@@ -51,6 +53,25 @@ public class Inventorysystem : MonoBehaviour
             
 
         }
+    }
+
+    public void AddToInventory(GameObject Item)
+    {
+        foreach (GameObject spot in Inventory.Keys.ToArray())
+        {
+            
+            if (Inventory[spot] == EmptySpot)
+            {
+                emptyespots.Add(spot);
+            }
+        }
+        Inventory[emptyespots[0]] = Item;
+        emptyespots.Remove(emptyespots[0]);
+    }
+
+    public void RemoveFromInventory(GameObject spot)
+    {
+        Inventory[spot].transform.Find("AmountCounter").GetComponent<TMP_Text>();
     }
     private void Update()
     {
