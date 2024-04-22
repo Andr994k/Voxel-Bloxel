@@ -16,7 +16,7 @@ public class ChunkRenderer : MonoBehaviour
     Mesh mesh;
     public bool showGizmo = false;
 
-    public ChunkData ChunkData { get; private set; }
+    public ChunkData chunkData { get; private set; }
 
     public bool ModifiedByThePlayer;
 
@@ -29,7 +29,7 @@ public class ChunkRenderer : MonoBehaviour
     }
     public void InitializeChunk(ChunkData data)
     {
-        this.ChunkData = data;
+        this.chunkData = data;
     }
     private void RenderMesh(MeshData meshData)
     {
@@ -59,21 +59,21 @@ public class ChunkRenderer : MonoBehaviour
     }
     public void UpdateChunk()
     {
-        RenderMesh(Chunk.GetChunkMeshData(ChunkData));
+        RenderMesh(Chunk.GetChunkMeshData(chunkData));
     }
 #if UNITY_EDITOR
     private void OnDrawGizmos()
     {
         if (showGizmo) 
         {
-            if (Application.isPlaying && ChunkData != null)
+            if (Application.isPlaying && chunkData != null)
             {
                 if (Selection.activeObject == gameObject)
                     Gizmos.color = new Color(0, 1, 0, 0.4f);
                 else
                     Gizmos.color = new Color(1, 0, 1, 0.4f);
 
-                Gizmos.DrawCube(transform.position + new Vector3(ChunkData.chunkSize / 2f, ChunkData.chunkHeight / 2f, ChunkData.chunkSize / 2f), new Vector3(ChunkData.chunkSize, ChunkData.chunkHeight, ChunkData.chunkSize));
+                Gizmos.DrawCube(transform.position + new Vector3(chunkData.chunkSize / 2f, chunkData.chunkHeight / 2f, chunkData.chunkSize / 2f), new Vector3(chunkData.chunkSize, chunkData.chunkHeight, chunkData.chunkSize));
             }
         }
     }

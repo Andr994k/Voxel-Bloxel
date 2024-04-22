@@ -60,8 +60,6 @@ public class Character : MonoBehaviour
     GameObject minusyt3destroysprite;
     GameObject minuszt3destroysprite;
 
-
-
     public bool fly = false;
 
     public Animator animator;
@@ -210,7 +208,9 @@ public class Character : MonoBehaviour
             hit.point = world.GetBlockPos(hit);
 
 
+
             Vector3Int blockPos = world.GetBlockPos(hit);
+            
 
             Vector3 xnewpos = new Vector3(blockPos.x+ 0.51f, blockPos.y, blockPos.z);
             Vector3 ynewpos = new Vector3(blockPos.x, blockPos.y+ 0.51f, blockPos.z);
@@ -273,6 +273,19 @@ public class Character : MonoBehaviour
 
                         madeT3 = true;
                     }
+
+                    //This is for finding which type of block the player is mining, in order to drop the correct block when destroyed
+                    //Reference to the chunkrenderer associated with the chunk where the raycast hit
+                    ChunkRenderer chunkRenderer = hit.collider.GetComponent<ChunkRenderer>();
+
+                    //Getting the chunkData associated with the renderer
+                    ChunkData chunkData = chunkRenderer.chunkData;
+
+                    //Getting the index of the block from its raycast
+                    int index = Chunk.GetIndexFromPosition(chunkData, (int)hit.point.x, (int)hit.point.y, (int)hit.point.z);
+
+                    //Using said index to get the blocktype from the list of blocks
+                    currentDestroyedBlock = chunkData.blocks[index];
 
 
                     ModifyTerrain(hit, BlockType.Air);

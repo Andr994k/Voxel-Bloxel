@@ -10,7 +10,8 @@ public class UndergroundLayerHandler : BlockLayerHandler
     {
         if (y < surfaceHeightNoise)
         {
-            Vector3Int pos = new Vector3Int(x, y, z);
+            //y cant be a negative number, so we subtract it with our worldposition because - - = +
+            Vector3Int pos = new Vector3Int(x, y - chunkData.worldPosition.y, z);
             Chunk.SetBlock(chunkData, pos, undergroundBlockType);
             return true;
         }

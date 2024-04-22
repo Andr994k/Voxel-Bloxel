@@ -32,6 +32,21 @@ public class DropLogic : MonoBehaviour
             stoneChild.SetActive(true);
             activeCollider = stoneChild.GetComponent<Collider>();
         }
+        if (block == BlockType.Dirt)
+        {
+            dirtChild.SetActive(true);
+            activeCollider = dirtChild.GetComponent<Collider>();
+        }
+        if (block == BlockType.Sand)
+        {
+            sandChild.SetActive(true);
+            activeCollider = sandChild.GetComponent<Collider>();
+        }
+        if (block == BlockType.Grass_Dirt)
+        {
+            grassChild.SetActive(true);
+            activeCollider = grassChild.GetComponent<Collider>();
+        }
     }
     private void Update()
     {
