@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Burst.CompilerServices;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.UIElements;
@@ -18,6 +20,10 @@ public class Character : MonoBehaviour
     //Destroy and place length
     public float interactionRayLength = 5;
 
+    //Place length for editor mode
+    public float editorInteractionRayLength = 20;
+
+    //The interactable ground
     public LayerMask groundMask;
 
     //Currently holding block
@@ -38,7 +44,8 @@ public class Character : MonoBehaviour
     bool madeT2 = false;
     bool madeT3 = false;
 
-    //the most inefficient implementation possible, but im lazy
+    //the most inefficient implementation possible, but im lazy and dont have time
+    //Different gameobjects for all the sides of a block
     GameObject xt1destroysprite;
     GameObject yt1destroysprite;
     GameObject zt1destroysprite;
@@ -60,7 +67,17 @@ public class Character : MonoBehaviour
     GameObject minusyt3destroysprite;
     GameObject minuszt3destroysprite;
 
-    public bool fly = false;
+    //Bool for determining when player is using edit mode
+    public bool isInEditorMode = true;
+    public Vector3Int pos1;
+    public Vector3Int pos2;
+    public bool firstPointPlaced = false;
+    public bool secondPointPlaced = false;
+    public bool playerHasConfirmed = false;
+
+    //
+    public Vector3Int blockCoords;
+
 
     public Animator animator;
 
@@ -85,41 +102,82 @@ public class Character : MonoBehaviour
         currenthealth = 100;
         playerInput.OnLeftMouseClick += HandleLeftMouseClick;
         playerInput.OnRightMouseClick += HandleRightMouseClick;
-        playerInput.OnFly += HandleFlyClick;
     }
 
-    private void HandleFlyClick()
-    {
-        fly = !fly;
-    }
 
     void Update()
     {
-        //Healthbar.fillAmount = currenthealth / 100f;
-        if (fly)
+        if (isInEditorMode && Input.GetMouseButtonDown(0))
         {
-            //animator.SetFloat("speed", 0);
-            //animator.SetBool("isGrounded", false);
-            //animator.ResetTrigger("jump");
-            playerMovement.Fly(playerInput.MovementInput, playerInput.IsJumping, playerInput.RunningPressed);
-
+            StartCoroutine(EditorPlace());
         }
-        else
+        if (isInEditorMode && firstPointPlaced && secondPointPlaced && Input.GetKeyDown(KeyCode.C))
         {
-            //animator.SetBool("isGrounded", playerMovement.IsGrounded);
-            if (playerMovement.IsGrounded && playerInput.IsJumping && isWaiting == false)
+            Vector3Int blockDifference = pos1 - pos2;
+            Debug.Log(blockDifference);
+            Math.Abs(blockDifference.y);
+            Math.Abs(blockDifference.z);
+            firstPointPlaced = false;
+            secondPointPlaced = false;
+            
+            for (int a = 0; a >= Math.Abs(blockDifference.x); a++)
             {
-                //animator.SetTrigger("jump");
-                isWaiting = true;
-                StopAllCoroutines();
-                StartCoroutine(ResetWaiting());
+                Debug.Log("First Layer");
+                if (blockDifference.x < 0)
+                {
+                    blockCoords.x = blockDifference.x - a;
+                }
+                if (blockDifference.x >= 0)
+                {
+                    blockCoords.x = blockDifference.x + a;
+                }
+                for (int b = 0; b >= Math.Abs(blockDifference.y); b++)
+                {
+                    Debug.Log("Second Layer");
+                    if (blockDifference.y < 0)
+                    {
+                        blockCoords.y = blockDifference.y - b;
+                    }
+                    if (blockDifference.y >= 0)
+                    {
+                        blockCoords.y = blockDifference.y + b;
+                    }
+                    for (int c = 0; c >= Math.Abs(blockDifference.z); c++)
+                    {
+                        Debug.Log("Third Layer");
+                        if (blockDifference.z < 0)
+                        {
+                            blockCoords.z = blockDifference.z - c;
+                        }
+                        if (blockDifference.z >= 0)
+                        {
+                            blockCoords.z = blockDifference.z + c;
+                        }
+                        Ray chunkRay = new Ray(blockCoords, Vector3Int.up);
+                        RaycastHit chunkhit;
+                        Physics.Raycast(chunkRay, out chunkhit, Mathf.Infinity, groundMask);
+                        ModifyTerrain(chunkhit, activeBlock);
+                    }
+                }
             }
-            //animator.SetFloat("speed", playerInput.MovementInput.magnitude);
-            playerMovement.HandleGravity(playerInput.IsJumping);
-            playerMovement.Walk(playerInput.MovementInput, playerInput.RunningPressed);
 
 
         }
+        //Healthbar.fillAmount = currenthealth / 100f;
+
+        //animator.SetBool("isGrounded", playerMovement.IsGrounded);
+        if (playerMovement.IsGrounded && playerInput.IsJumping && isWaiting == false)
+        {
+            //animator.SetTrigger("jump");
+            isWaiting = true;
+            //StopAllCoroutines();
+            StartCoroutine(ResetWaiting());
+        }
+        //animator.SetFloat("speed", playerInput.MovementInput.magnitude);
+        playerMovement.HandleGravity(playerInput.IsJumping);
+        playerMovement.Walk(playerInput.MovementInput, playerInput.RunningPressed);
+
+
         if (Input.GetKeyDown(KeyCode.Alpha0))
         {
             activeBlock = BlockType.Nothing;
@@ -169,29 +227,66 @@ public class Character : MonoBehaviour
 
     private void HandleLeftMouseClick()
     {
-        Ray playerRay = new Ray(mainCamera.transform.position, mainCamera.transform.forward);
-        RaycastHit hit;
-        if (Physics.Raycast(playerRay, out hit, interactionRayLength, groundMask))
+        if (isInEditorMode)
         {
-            animator.SetBool("Mining", true);
-            StartCoroutine(DestroyBlock(hit));
+            
         }
-
+        else
+        {
+            Ray playerRay = new Ray(mainCamera.transform.position, mainCamera.transform.forward);
+            RaycastHit hit;
+            if (Physics.Raycast(playerRay, out hit, interactionRayLength, groundMask))
+            {
+                animator.SetBool("Mining", true);
+                StartCoroutine(DestroyBlock(hit));
+            }
+        }
     }
     private void HandleRightMouseClick()
     {
-        Ray playerRay = new Ray(mainCamera.transform.position, mainCamera.transform.forward);
-        RaycastHit hit;
-        if (Physics.Raycast(playerRay, out hit, interactionRayLength, groundMask))
+        if (isInEditorMode)
         {
-            ModifyTerrain(hit, activeBlock);
-        }
 
+        }
+        else
+        {
+            Ray playerRay = new Ray(mainCamera.transform.position, mainCamera.transform.forward);
+            RaycastHit hit;
+            if (Physics.Raycast(playerRay, out hit, interactionRayLength, groundMask))
+            {
+                ModifyTerrain(hit, activeBlock);
+            }
+        }
     }
 
     private void ModifyTerrain(RaycastHit hit, BlockType blockType)
     {
         world.SetBlock(hit, blockType);
+    }
+    IEnumerator EditorPlace()
+    {
+        Ray editorRay = new Ray(mainCamera.transform.position, mainCamera.transform.forward);
+        RaycastHit editorHit;
+        if (Physics.Raycast(editorRay, out editorHit, editorInteractionRayLength, groundMask) && firstPointPlaced == false)
+        {
+            pos1 = new Vector3Int((int)editorHit.point.x, (int)editorHit.point.y, (int)editorHit.point.z);
+            firstPointPlaced = true;
+            Debug.Log(pos1);
+        }
+
+        else if (Physics.Raycast(editorRay, out editorHit, editorInteractionRayLength, groundMask) && secondPointPlaced == false)
+        {
+            pos2 = new Vector3Int((int)editorHit.point.x, (int)editorHit.point.y, (int)editorHit.point.z);
+            secondPointPlaced = true;
+            Debug.Log(pos2);
+        }
+        if (firstPointPlaced && secondPointPlaced)
+        {
+            //Show some ui depicting a line between the two points idk
+            
+        }
+        yield return null;
+        
     }
     IEnumerator DestroyBlock(RaycastHit hit)
     {
@@ -276,16 +371,18 @@ public class Character : MonoBehaviour
 
                     //This is for finding which type of block the player is mining, in order to drop the correct block when destroyed
                     //Reference to the chunkrenderer associated with the chunk where the raycast hit
+                    //This is needed for the chunkData associated with the renderer, which stores various data about the blocks present in the chunk
                     ChunkRenderer chunkRenderer = hit.collider.GetComponent<ChunkRenderer>();
 
-                    //Getting the chunkData associated with the renderer
-                    ChunkData chunkData = chunkRenderer.chunkData;
-
                     //Getting the index of the block from its raycast
-                    int index = Chunk.GetIndexFromPosition(chunkData, (int)hit.point.x, (int)hit.point.y, (int)hit.point.z);
+                    //For this we need to convert raycast coordinates into a Vector3Int, which we can use to get the local coordinates of the block, which is needed to find the index of the block, and therefore the blocktype corresponding with it
+                    Vector3Int intPosition = new Vector3Int ((int)hit.point.x, (int)hit.point.y, (int)hit.point.z);
+                    Vector3Int localPosition = Chunk.GetBlockInChunkCoordinates(chunkRenderer.chunkData, intPosition);
+                    int index = Chunk.GetIndexFromPosition(chunkRenderer.chunkData, localPosition.x, localPosition.y, localPosition.z);
+
 
                     //Using said index to get the blocktype from the list of blocks
-                    currentDestroyedBlock = chunkData.blocks[index];
+                    currentDestroyedBlock = chunkRenderer.chunkData.blocks[index];
 
 
                     ModifyTerrain(hit, BlockType.Air);
