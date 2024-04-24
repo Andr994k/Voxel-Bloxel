@@ -890,21 +890,9 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1494586762304015873, guid: 1803c385f2b126a419d8939318a0a8cc, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 2572873579539556902, guid: 1803c385f2b126a419d8939318a0a8cc, type: 3}
       propertyPath: m_Name
       value: Dropped block
-      objectReference: {fileID: 0}
-    - target: {fileID: 4605675998409741837, guid: 1803c385f2b126a419d8939318a0a8cc, type: 3}
-      propertyPath: m_IncludeLayers.m_Bits
-      value: 8
-      objectReference: {fileID: 0}
-    - target: {fileID: 5907906982782929184, guid: 1803c385f2b126a419d8939318a0a8cc, type: 3}
-      propertyPath: m_IncludeLayers.m_Bits
-      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 6568960251204864226, guid: 1803c385f2b126a419d8939318a0a8cc, type: 3}
       propertyPath: m_LocalPosition.x

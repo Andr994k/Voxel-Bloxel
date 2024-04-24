@@ -66,7 +66,7 @@ public static class Chunk
         }
     }
 
-    private static int GetIndexFromPosition(ChunkData chunkData, int x, int y, int z)
+    public static int GetIndexFromPosition(ChunkData chunkData, int x, int y, int z)
     {
         return x + chunkData.chunkSize * y + chunkData.chunkSize * chunkData.chunkHeight * z;
     }

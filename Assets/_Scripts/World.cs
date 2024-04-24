@@ -16,15 +16,18 @@ public class World : MonoBehaviour
     public TerrainGenerator terrainGenerator;
     public Vector2Int mapSeedOffset;
 
-    //Dictionary<Vector3Int, ChunkData> chunkDataDictionary = new Dictionary<Vector3Int, ChunkData>();
-    //Dictionary<Vector3Int, ChunkRenderer> chunkDictionary = new Dictionary<Vector3Int, ChunkRenderer>();
+    //public Dictionary<Vector3Int, ChunkData> chunkDataDictionary = new Dictionary<Vector3Int, ChunkData>();
+    //public Dictionary<Vector3Int, ChunkRenderer> chunkDictionary = new Dictionary<Vector3Int, ChunkRenderer>();
 
     public UnityEvent onWorldCreated, onNewChunksGenerated;
 
+    public Character character;
     public WorldData worldData { get; private set; }
 
     private void Awake()
     {
+        StartCoroutine(LookForPlayer());
+
         worldData = new WorldData
         {
             chunkHeight = this.chunkHeight,
@@ -48,6 +51,7 @@ public class World : MonoBehaviour
         {
             WorldDataHelper.RemoveChunk(this, pos);
         }
+        
 
         foreach (Vector3Int pos in worldGenerationData.chunkDataPositionsToRemove)
         {
@@ -118,6 +122,7 @@ public class World : MonoBehaviour
 
             chunkPositionsToRemove = chunkPositionsToRemove,
             chunkDataPositionsToRemove = chunkDataPositionsToRemove,
+            chunkPositionsToUpdate = new List<Vector3Int>()
         };
         return data;
     }
@@ -141,61 +146,57 @@ public class World : MonoBehaviour
         if (chunk == null)
             return false;
 
-        
-
         Vector3Int pos = GetBlockPos(hit);
-        
-        if (blockType == BlockType.Air)
+        Debug.Log(character.isInEditorMode);
+        if (blockType == BlockType.Air || character.isInEditorMode == true)
         {
-            WorldDataHelper.SetBlock(chunk.ChunkData.worldReference, pos, blockType);
+            WorldDataHelper.SetBlock(chunk.chunkData.worldReference, pos, blockType);
+
         }
         else
         {
             if (hit.point[0] == pos[0] + 0.5)
             {
-                //x
+                //x face logic
                 Vector3Int newpos = new Vector3Int(pos.x + 1, pos.y, pos.z);
-                WorldDataHelper.SetBlock(chunk.ChunkData.worldReference, newpos, blockType);
+                WorldDataHelper.SetBlock(chunk.chunkData.worldReference, newpos, blockType);
             }
             if (hit.point[1] == pos[1] + 0.5)
             {
                 //y
                 Vector3Int newpos = new Vector3Int(pos.x, pos.y + 1, pos.z);
-                WorldDataHelper.SetBlock(chunk.ChunkData.worldReference, newpos, blockType);
+                WorldDataHelper.SetBlock(chunk.chunkData.worldReference, newpos, blockType);
             }
             if (hit.point[2] == pos[2] + 0.5)
             {
                 //z
                 Vector3Int newpos = new Vector3Int(pos.x, pos.y, pos.z + 1);
-                WorldDataHelper.SetBlock(chunk.ChunkData.worldReference, newpos, blockType);
+                WorldDataHelper.SetBlock(chunk.chunkData.worldReference, newpos, blockType);
             }
             if (hit.point[0] == pos[0] - 0.5)
             {
                 //-x
                 Vector3Int newpos = new Vector3Int(pos.x - 1, pos.y, pos.z);
-                WorldDataHelper.SetBlock(chunk.ChunkData.worldReference, newpos, blockType);
+                WorldDataHelper.SetBlock(chunk.chunkData.worldReference, newpos, blockType);
             }
             if (hit.point[1] == pos[1] - 0.5)
             {
                 //-y
                 Vector3Int newpos = new Vector3Int(pos.x, pos.y - 1, pos.z);
-                WorldDataHelper.SetBlock(chunk.ChunkData.worldReference, newpos, blockType);
+                WorldDataHelper.SetBlock(chunk.chunkData.worldReference, newpos, blockType);
             }
             if (hit.point[2] == pos[2] - 0.5)
             {
                 //-z
                 Vector3Int newpos = new Vector3Int(pos.x, pos.y, pos.z - 1);
-                WorldDataHelper.SetBlock(chunk.ChunkData.worldReference, newpos, blockType);
+                WorldDataHelper.SetBlock(chunk.chunkData.worldReference, newpos, blockType);
             }
-            
         }
-            
-
         chunk.ModifiedByThePlayer = true;
         
-        if (Chunk.IsOnEdge(chunk.ChunkData, pos))
+        if (Chunk.IsOnEdge(chunk.chunkData, pos))
         {
-            List<ChunkData> neighbourDataList = Chunk.GetEdgeNeighbourChunk(chunk.ChunkData, pos);
+            List<ChunkData> neighbourDataList = Chunk.GetEdgeNeighbourChunk(chunk.chunkData, pos);
             foreach (ChunkData neighbourData in neighbourDataList)
             {
                 ChunkRenderer chunkToUpdate = WorldDataHelper.GetChunk(neighbourData.worldReference, neighbourData.worldPosition);
@@ -237,6 +238,7 @@ public class World : MonoBehaviour
         public List<Vector3Int> chunkDataPositionsToCreate;
         public List<Vector3Int> chunkPositionsToRemove;
         public List<Vector3Int> chunkDataPositionsToRemove;
+        public List<Vector3Int> chunkPositionsToUpdate;
     }
 
     public struct WorldData
@@ -245,5 +247,10 @@ public class World : MonoBehaviour
         public Dictionary<Vector3Int, ChunkRenderer> chunkDictionary;
         public int chunkSize;
         public int chunkHeight;
+    }
+    IEnumerator LookForPlayer()
+    {
+        yield return new WaitForSeconds(3f);
+        character = GameObject.Find("Player(Clone)").GetComponent<Character>();
     }
 }
