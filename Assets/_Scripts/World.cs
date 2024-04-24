@@ -21,10 +21,13 @@ public class World : MonoBehaviour
 
     public UnityEvent onWorldCreated, onNewChunksGenerated;
 
+    public Character character;
     public WorldData worldData { get; private set; }
 
     private void Awake()
     {
+        StartCoroutine(LookForPlayer());
+
         worldData = new WorldData
         {
             chunkHeight = this.chunkHeight,
@@ -143,19 +146,18 @@ public class World : MonoBehaviour
         if (chunk == null)
             return false;
 
-        
-
         Vector3Int pos = GetBlockPos(hit);
-        
-        if (blockType == BlockType.Air)
+        Debug.Log(character.isInEditorMode);
+        if (blockType == BlockType.Air || character.isInEditorMode == true)
         {
             WorldDataHelper.SetBlock(chunk.chunkData.worldReference, pos, blockType);
+
         }
         else
         {
             if (hit.point[0] == pos[0] + 0.5)
             {
-                //x
+                //x face logic
                 Vector3Int newpos = new Vector3Int(pos.x + 1, pos.y, pos.z);
                 WorldDataHelper.SetBlock(chunk.chunkData.worldReference, newpos, blockType);
             }
@@ -189,7 +191,6 @@ public class World : MonoBehaviour
                 Vector3Int newpos = new Vector3Int(pos.x, pos.y, pos.z - 1);
                 WorldDataHelper.SetBlock(chunk.chunkData.worldReference, newpos, blockType);
             }
-            
         }
         chunk.ModifiedByThePlayer = true;
         
@@ -246,5 +247,10 @@ public class World : MonoBehaviour
         public Dictionary<Vector3Int, ChunkRenderer> chunkDictionary;
         public int chunkSize;
         public int chunkHeight;
+    }
+    IEnumerator LookForPlayer()
+    {
+        yield return new WaitForSeconds(3f);
+        character = GameObject.Find("Player(Clone)").GetComponent<Character>();
     }
 }

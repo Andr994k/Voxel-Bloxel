@@ -1,16 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor;
-using UnityEditor.SearchService;
 using UnityEngine;
-using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
 {
     [SerializeField] private GameObject menu;
     [SerializeField] private GameObject settings;
-    [SerializeField] Object MainScene;
+    [SerializeField] private Object MainScene;
     public void startgame()
     {
         SceneManager.LoadScene(MainScene.name);
@@ -22,7 +17,6 @@ public class MainMenu : MonoBehaviour
         menu.SetActive(false);
 
     }
-
     public void Back()
     {
         settings.SetActive(false);
