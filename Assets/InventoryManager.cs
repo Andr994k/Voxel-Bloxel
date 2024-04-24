@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class InventoryManager : MonoBehaviour
 {
-    public List<Inventoryslot> inventoryslots = new();
+    public Inventoryslot[] inventoryslots ;
     public GameObject Inventoryitemprefab;
     public GameObject Inv;
     public GameObject InvBackground;
@@ -29,14 +29,6 @@ public class InventoryManager : MonoBehaviour
 
     public void Start()
     {
-        for (int i = 0; i < GameObject.Find("Hotbar").transform.childCount ; i++)
-        {
-            inventoryslots.Add(GameObject.Find("Hotbar").transform.GetChild(i).GetComponent<Inventoryslot>());
-        }
-        for (int i = 0; i < GameObject.Find("Inventory").transform.childCount; i++)
-        {
-            inventoryslots.Add(GameObject.Find("Inventory").transform.GetChild(i).GetComponent<Inventoryslot>());
-        }
         Changeselectedslot(0);
     }
 
@@ -70,18 +62,7 @@ public class InventoryManager : MonoBehaviour
 
     public bool AddItem(Item item)
     {
-        for (int i = 0; i <= inventoryslots.Count; i++)
-        {
-            Inventoryslot slot = inventoryslots[i];
-            InventoryItem iteminslot = slot.GetComponentInChildren<InventoryItem>();
-            if (iteminslot == null)
-            {
-                SpawnItem(item, slot);
-                return true;
-            }
-        }
-
-        for (int i = 0; i <= inventoryslots.Count; i++)
+        for (int i = 0; i < inventoryslots.Length; i++)
         {
             Inventoryslot slot = inventoryslots[i];
             InventoryItem iteminslot = slot.GetComponentInChildren<InventoryItem>();
@@ -89,10 +70,23 @@ public class InventoryManager : MonoBehaviour
             {
                 iteminslot.CurrentCount++;
                 iteminslot.RefreshCount();
-                SpawnItem(item, slot);
                 return true;
             }
         }
+
+        for (int i = 0; i < inventoryslots.Length ; i++)
+        {
+            Inventoryslot slot = inventoryslots[i];
+            InventoryItem iteminslot = slot.GetComponentInChildren<InventoryItem>();
+            if (iteminslot == null)
+            {
+                SpawnItem(item, slot);
+                slot.GetComponentInChildren<InventoryItem>().CurrentCount = 1;
+                return true;
+            }
+        }
+
+        
         return false;
     }
     public void RemoveItem(Item item) 
