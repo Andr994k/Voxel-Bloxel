@@ -221,7 +221,7 @@ public class World : MonoBehaviour
             }
         }
         chunk.ModifiedByThePlayer = true;
-        
+
         if (Chunk.IsOnEdge(chunk.chunkData, pos))
         {
             List<ChunkData> neighbourDataList = Chunk.GetEdgeNeighbourChunk(chunk.chunkData, pos);
@@ -231,9 +231,8 @@ public class World : MonoBehaviour
                 if (chunkToUpdate != null)
                     chunkToUpdate.UpdateChunk();
             }
-
         }
-        
+
         chunk.UpdateChunk();
         return true;
     }
