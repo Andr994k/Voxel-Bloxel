@@ -2,8 +2,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using TMPro;
-using UnityEngine.Assertions.Must;
-using Unity.PlasticSCM.Editor.WebApi;
 
 public class InventoryItem : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHandler
 {
@@ -24,7 +22,6 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IEndDragHandler, 
         transform.SetParent(transform.root);
         transform.SetAsLastSibling();
         image.raycastTarget = false;
-        //transform.GetChild(0).GetComponent < TMP_Text >().raycastTarget = false;
     }
 
     public void InitializeItem(Item newitem)
@@ -51,7 +48,6 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IEndDragHandler, 
         
         transform.SetParent(parentAfterDrag);
         image.raycastTarget = true;
-        //transform.GetChild(0).GetComponent<TMP_Text>().raycastTarget = true;
     }
 
 
