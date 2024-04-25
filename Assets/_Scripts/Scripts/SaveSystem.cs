@@ -8,7 +8,6 @@ using System;
 
 public static class SaveSystem
 {
-   
    public static void SavePlayer (Player player)
    {
         BinaryFormatter formatter = new BinaryFormatter();

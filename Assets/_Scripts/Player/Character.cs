@@ -112,7 +112,6 @@ public class Character : MonoBehaviour
         playerInput.OnRightMouseClick += HandleRightMouseClick;
     }
 
-
     (bool, RaycastHit) lookForChunk(Vector3Int coords, Vector3Int direction)
     {
         Ray chunkRay = new Ray(coords, direction);
@@ -126,25 +125,16 @@ public class Character : MonoBehaviour
         {
             EditorPlace();
         }
-        if (isInEditorMode && firstPointPlaced && secondPointPlaced && Input.GetKeyDown(KeyCode.C))
+        if (isInEditorMode && firstPointPlaced && secondPointPlaced && Input.GetKeyDown(KeyCode.C) && activeBlock != BlockType.Air)
         {
-            Debug.Log("Starting...");
             List<Vector3Int> blockCoordList = FindCoordinates(pos1, pos2);
-
             foreach (Vector3Int coordinate in blockCoordList)
             {
-                Debug.Log("(Foreach)Trying coordinate:" + coordinate);
-                Debug.Log(directionList.Count);
-
                 for (int i = 0; i < directionList.Count; i++)
                 {
-                    Debug.Log("(For)Trying direction:" + directionList[i]);
-
                     (bool hitSomething, RaycastHit hit) = lookForChunk(coordinate, directionList[i]);
-
                     if (hitSomething)
                     {
-                        Debug.Log("Made block at" +  coordinate);
                         world.SetBlockEditor(hit, coordinate, activeBlock);
                         break;
                     }
@@ -157,15 +147,11 @@ public class Character : MonoBehaviour
         
         //Healthbar.fillAmount = currenthealth / 100f;
 
-        //animator.SetBool("isGrounded", playerMovement.IsGrounded);
         if (playerMovement.IsGrounded && playerInput.IsJumping && isWaiting == false)
         {
-            //animator.SetTrigger("jump");
             isWaiting = true;
-            //StopAllCoroutines();
             StartCoroutine(ResetWaiting());
         }
-        //animator.SetFloat("speed", playerInput.MovementInput.magnitude);
         playerMovement.HandleGravity(playerInput.IsJumping);
         playerMovement.Walk(playerInput.MovementInput, playerInput.RunningPressed);
 
@@ -212,6 +198,11 @@ public class Character : MonoBehaviour
             SaveSystem.SaveWorld(modifiedChunks);
         }
 
+        if (Input.GetKeyDown(KeyCode.T))
+        {
+            isInEditorMode = !isInEditorMode;
+        }
+
 
         if (activeBlock == BlockType.Nothing)
         {
@@ -248,7 +239,6 @@ public class Character : MonoBehaviour
                 }
             }
         }
-
         return coordinates;
     }
     void makeModifiedChunksList()
@@ -270,7 +260,6 @@ public class Character : MonoBehaviour
         //animator.ResetTrigger("jump");
         isWaiting = false;
     }
-
 
     private void HandleLeftMouseClick()
     {
@@ -318,19 +307,12 @@ public class Character : MonoBehaviour
         {
             pos1 = new Vector3Int((int)editorHit.point.x, (int)editorHit.point.y, (int)editorHit.point.z);
             firstPointPlaced = true;
-            Debug.Log(pos1);
         }
 
         else if (Physics.Raycast(editorRay, out editorHit, editorInteractionRayLength, groundMask) && secondPointPlaced == false)
         {
             pos2 = new Vector3Int((int)editorHit.point.x, (int)editorHit.point.y, (int)editorHit.point.z);
             secondPointPlaced = true;
-            Debug.Log(pos2);
-        }
-        if (firstPointPlaced && secondPointPlaced)
-        {
-            //Show some ui depicting a line between the two points idk
-            
         }
         
     }
@@ -348,11 +330,8 @@ public class Character : MonoBehaviour
 
             hit.point = world.GetBlockPos(hit);
 
-
-
             Vector3Int blockPos = world.GetBlockPos(hit);
             
-
             Vector3 xnewpos = new Vector3(blockPos.x+ 0.51f, blockPos.y, blockPos.z);
             Vector3 ynewpos = new Vector3(blockPos.x, blockPos.y+ 0.51f, blockPos.z);
             Vector3 znewpos = new Vector3(blockPos.x, blockPos.y, blockPos.z+0.51f);
@@ -362,8 +341,6 @@ public class Character : MonoBehaviour
 
             Quaternion xrotation = new Quaternion(Quaternion.identity.x, Quaternion.identity.y + 90, Quaternion.identity.z, Quaternion.identity.w+ 90);
             Quaternion yrotation = new Quaternion(Quaternion.identity.x+ 90, Quaternion.identity.y, Quaternion.identity.z, Quaternion.identity.w + 90);
-
-
 
             if (Input.GetMouseButton(0) && counter < 3 && hit.point == hitCheck.point)
             {
@@ -430,14 +407,12 @@ public class Character : MonoBehaviour
                     //Using said index to get the blocktype from the list of blocks
                     currentDestroyedBlock = chunkRenderer.chunkData.blocks[index];
 
-
                     ModifyTerrain(hit, BlockType.Air);
                     notDestroyed = false;
                     StopAllCoroutines();
                     animator.SetBool("Mining", false);
                     Instantiate(dropBlockPrefab, hit.point, Quaternion.identity);
                     
-
 
                     Destroy(xt1destroysprite);
                     Destroy(yt1destroysprite);
@@ -487,7 +462,6 @@ public class Character : MonoBehaviour
                 Destroy(minusxt3destroysprite);
                 Destroy(minusyt3destroysprite);
                 Destroy(minuszt3destroysprite);
-
 
                 animator.SetBool("Mining", false);
                 notDestroyed = false;
