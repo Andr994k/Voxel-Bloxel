@@ -138,6 +138,35 @@ public class World : MonoBehaviour
     {
         chunk.gameObject.SetActive(false);
     }
+    internal bool SetBlockEditor(RaycastHit hit, Vector3Int coords, BlockType blockType)
+    {
+
+        ChunkRenderer chunk = hit.collider.GetComponent<ChunkRenderer>();
+        if (chunk == null)
+            return false;
+
+        if (blockType == BlockType.Air || character.isInEditorMode == true)
+        {
+            WorldDataHelper.SetBlock(chunk.chunkData.worldReference, coords, blockType);
+
+        }
+
+        chunk.ModifiedByThePlayer = true;
+
+        if (Chunk.IsOnEdge(chunk.chunkData, coords))
+        {
+            List<ChunkData> neighbourDataList = Chunk.GetEdgeNeighbourChunk(chunk.chunkData, coords);
+            foreach (ChunkData neighbourData in neighbourDataList)
+            {
+                ChunkRenderer chunkToUpdate = WorldDataHelper.GetChunk(neighbourData.worldReference, neighbourData.worldPosition);
+                if (chunkToUpdate != null)
+                    chunkToUpdate.UpdateChunk();
+            }
+
+        }
+        chunk.UpdateChunk();
+        return true;
+    }
 
     internal bool SetBlock(RaycastHit hit, BlockType blockType)
     {
@@ -147,7 +176,6 @@ public class World : MonoBehaviour
             return false;
 
         Vector3Int pos = GetBlockPos(hit);
-        Debug.Log(character.isInEditorMode);
         if (blockType == BlockType.Air || character.isInEditorMode == true)
         {
             WorldDataHelper.SetBlock(chunk.chunkData.worldReference, pos, blockType);
@@ -250,7 +278,7 @@ public class World : MonoBehaviour
     }
     IEnumerator LookForPlayer()
     {
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(5f);
         character = GameObject.Find("Player(Clone)").GetComponent<Character>();
     }
 }

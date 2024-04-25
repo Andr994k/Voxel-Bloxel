@@ -18,14 +18,23 @@ public class ChunkRenderer : MonoBehaviour
 
     public ChunkData chunkData { get; private set; }
 
-    public bool ModifiedByThePlayer;
-
+    public bool ModifiedByThePlayer
+    {
+        get
+        {
+            return chunkData.modifiedByThePlayer;
+        }
+        set
+        {
+            chunkData.modifiedByThePlayer = value;
+        }
+    }
 
     private void Awake()
     {
         meshFilter = GetComponent<MeshFilter>();
         meshCollider = GetComponent<MeshCollider>();
-        mesh = meshFilter.mesh; 
+        mesh = meshFilter.mesh;
     }
     public void InitializeChunk(ChunkData data)
     {

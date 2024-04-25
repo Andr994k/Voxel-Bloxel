@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing.Drawing2D;
 using Unity.Burst.CompilerServices;
 using UnityEngine;
 using UnityEngine.UI;
@@ -75,9 +76,15 @@ public class Character : MonoBehaviour
     public bool secondPointPlaced = false;
     public bool playerHasConfirmed = false;
 
-    //
-    public Vector3Int blockCoords;
+    //List of all cardinal directions in unity, needed for editor mode checks
+    public List<Vector3Int> directionList = new List<Vector3Int> {Vector3Int.up, Vector3Int.down, Vector3Int.right, Vector3Int.left, Vector3Int.forward, Vector3Int.back};
 
+    //List of all chunks that have been modified by the player, so that they can be saved
+    List<ChunkData> modifiedChunks;
+
+
+    //Needed for foreach loop making a list of chunks that have been modified
+    ChunkData chunkData;
 
     public Animator animator;
 
@@ -96,6 +103,7 @@ public class Character : MonoBehaviour
         playerInput = GetComponent<PlayerInput>();
         playerMovement = GetComponent<PlayerMovement>();
         world = FindObjectOfType<World>();
+        modifiedChunks = new List<ChunkData>();
     }
     private void Start()
     {
@@ -105,64 +113,48 @@ public class Character : MonoBehaviour
     }
 
 
+    (bool, RaycastHit) lookForChunk(Vector3Int coords, Vector3Int direction)
+    {
+        Ray chunkRay = new Ray(coords, direction);
+        RaycastHit chunkhit;
+        return (Physics.Raycast(chunkRay, out chunkhit, Mathf.Infinity, groundMask), chunkhit);
+    }
+
     void Update()
     {
         if (isInEditorMode && Input.GetMouseButtonDown(0))
         {
-            StartCoroutine(EditorPlace());
+            EditorPlace();
         }
         if (isInEditorMode && firstPointPlaced && secondPointPlaced && Input.GetKeyDown(KeyCode.C))
         {
-            Vector3Int blockDifference = pos1 - pos2;
-            Debug.Log(blockDifference);
-            Math.Abs(blockDifference.y);
-            Math.Abs(blockDifference.z);
+            Debug.Log("Starting...");
+            List<Vector3Int> blockCoordList = FindCoordinates(pos1, pos2);
+
+            foreach (Vector3Int coordinate in blockCoordList)
+            {
+                Debug.Log("(Foreach)Trying coordinate:" + coordinate);
+                Debug.Log(directionList.Count);
+
+                for (int i = 0; i < directionList.Count; i++)
+                {
+                    Debug.Log("(For)Trying direction:" + directionList[i]);
+
+                    (bool hitSomething, RaycastHit hit) = lookForChunk(coordinate, directionList[i]);
+
+                    if (hitSomething)
+                    {
+                        Debug.Log("Made block at" +  coordinate);
+                        world.SetBlockEditor(hit, coordinate, activeBlock);
+                        break;
+                    }
+                }
+                
+            }
             firstPointPlaced = false;
             secondPointPlaced = false;
-            
-            for (int a = 0; a >= Math.Abs(blockDifference.x); a++)
-            {
-                Debug.Log("First Layer");
-                if (blockDifference.x < 0)
-                {
-                    blockCoords.x = blockDifference.x - a;
-                }
-                if (blockDifference.x >= 0)
-                {
-                    blockCoords.x = blockDifference.x + a;
-                }
-                for (int b = 0; b >= Math.Abs(blockDifference.y); b++)
-                {
-                    Debug.Log("Second Layer");
-                    if (blockDifference.y < 0)
-                    {
-                        blockCoords.y = blockDifference.y - b;
-                    }
-                    if (blockDifference.y >= 0)
-                    {
-                        blockCoords.y = blockDifference.y + b;
-                    }
-                    for (int c = 0; c >= Math.Abs(blockDifference.z); c++)
-                    {
-                        Debug.Log("Third Layer");
-                        if (blockDifference.z < 0)
-                        {
-                            blockCoords.z = blockDifference.z - c;
-                        }
-                        if (blockDifference.z >= 0)
-                        {
-                            blockCoords.z = blockDifference.z + c;
-                        }
-                        Ray chunkRay = new Ray(blockCoords, Vector3Int.up);
-                        RaycastHit chunkhit;
-                        Physics.Raycast(chunkRay, out chunkhit, Mathf.Infinity, groundMask);
-                        ModifyTerrain(chunkhit, activeBlock);
-                    }
-                }
-            }
-
-
         }
+        
         //Healthbar.fillAmount = currenthealth / 100f;
 
         //animator.SetBool("isGrounded", playerMovement.IsGrounded);
@@ -182,30 +174,44 @@ public class Character : MonoBehaviour
         {
             activeBlock = BlockType.Nothing;
         }
+
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             activeBlock = BlockType.Stone;
         }
+
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
             activeBlock = BlockType.Sand;
         }
+
         if (Input.GetKeyDown(KeyCode.Alpha3))
         {
-            activeBlock = BlockType.TreeTrunk;
+            activeBlock = BlockType.Dirt;            
         }
+
         if (Input.GetKeyDown(KeyCode.Alpha4))
         {
             activeBlock = BlockType.Grass_Dirt;
         }
+
         if (Input.GetKeyDown(KeyCode.Alpha5))
         {
             activeBlock = BlockType.TreeLeavesSolid;
         }
+
         if (Input.GetKeyDown(KeyCode.Alpha6))
         {
-            activeBlock = BlockType.Dirt;
+            activeBlock = BlockType.TreeTrunk;
         }
+
+
+        if (Input.GetKeyDown(KeyCode.O))
+        {
+            makeModifiedChunksList();
+        }
+
+
         if (activeBlock == BlockType.Nothing)
         {
             animator.SetBool("HoldingBlock", false);
@@ -217,6 +223,46 @@ public class Character : MonoBehaviour
 
 
     }
+
+    List<Vector3Int> FindCoordinates(Vector3Int start, Vector3Int end)
+    {
+        List<Vector3Int> coordinates = new List<Vector3Int>();
+
+        //Need to find the larger coordinate of the two, so that they can be used in the for-loop structure, as it assumes the first variable is the smallest
+        int minX = Mathf.Min(start.x, end.x);
+        int maxX = Mathf.Max(start.x, end.x);
+        int minY = Mathf.Min(start.y, end.y);
+        int maxY = Mathf.Max(start.y, end.y);
+        int minZ = Mathf.Min(start.z, end.z);
+        int maxZ = Mathf.Max(start.z, end.z);
+
+        for (int x = minX; x <= maxX; x++)
+        {
+            for (int y = minY; y <= maxY; y++)
+            {
+                for (int z = minZ; z <= maxZ; z++)
+                {
+                    Vector3Int coordinate = new Vector3Int(x, y, z);
+                    coordinates.Add(coordinate);
+                }
+            }
+        }
+
+        return coordinates;
+    }
+    void makeModifiedChunksList()
+    {
+        foreach (var pair in world.worldData.chunkDataDictionary)
+        {
+            chunkData = pair.Value;
+
+            if (chunkData.modifiedByThePlayer)
+            {
+                modifiedChunks.Add(chunkData);
+            }
+        }
+    }
+
     IEnumerator ResetWaiting()
     {
         yield return new WaitForSeconds(0.1f);
@@ -229,7 +275,7 @@ public class Character : MonoBehaviour
     {
         if (isInEditorMode)
         {
-            
+            //Dont do anything here if player is in editormode, functionality is being done elsewhere
         }
         else
         {
@@ -246,7 +292,7 @@ public class Character : MonoBehaviour
     {
         if (isInEditorMode)
         {
-
+            //Dont do anything here if player is in editormode, functionality is being done elsewhere
         }
         else
         {
@@ -263,7 +309,7 @@ public class Character : MonoBehaviour
     {
         world.SetBlock(hit, blockType);
     }
-    IEnumerator EditorPlace()
+    void EditorPlace()
     {
         Ray editorRay = new Ray(mainCamera.transform.position, mainCamera.transform.forward);
         RaycastHit editorHit;
@@ -285,7 +331,6 @@ public class Character : MonoBehaviour
             //Show some ui depicting a line between the two points idk
             
         }
-        yield return null;
         
     }
     IEnumerator DestroyBlock(RaycastHit hit)
@@ -441,10 +486,8 @@ public class Character : MonoBehaviour
                 Destroy(minusyt3destroysprite);
                 Destroy(minuszt3destroysprite);
 
-                if (Input.GetMouseButton(0) == false)
-                {
-                    animator.SetBool("Mining", false);
-                }
+
+                animator.SetBool("Mining", false);
                 notDestroyed = false;
 
                 madeT1 = false;

@@ -810,7 +810,6 @@ MonoBehaviour:
   playerRunSpeed: 8
   jumpHeight: 6
   gravityValue: -20
-  flySpeed: 2
   groundMask:
     serializedVersion: 2
     m_Bits: 8
@@ -842,7 +841,7 @@ MonoBehaviour:
   t1: {fileID: 2303376710983128862, guid: c9e22afb70e8464488070cbf4da83da7, type: 3}
   t2: {fileID: 6931355907802809881, guid: 5ce7687a6bef1dc49a8f940bbbbbe52b, type: 3}
   t3: {fileID: 6649134334809003765, guid: 865e6e542f8649348b16f7c5447bad1f, type: 3}
-  isInEditorMode: 1
+  isInEditorMode: 0
   pos1: {x: 0, y: 0, z: 0}
   pos2: {x: 0, y: 0, z: 0}
   firstPointPlaced: 0

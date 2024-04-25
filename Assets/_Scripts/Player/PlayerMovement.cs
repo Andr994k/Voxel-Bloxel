@@ -12,8 +12,7 @@ public class PlayerMovement : MonoBehaviour
     private float jumpHeight = 1.0f;
     [SerializeField]
     private float gravityValue = -9.81f;
-    [SerializeField]
-    private float flySpeed = 2;
+
 
     private Vector3 playerVelocity;
 
@@ -35,21 +34,6 @@ public class PlayerMovement : MonoBehaviour
     private Vector3 GetMovementDirection(Vector3 movementInput)
     {
         return transform.right * movementInput.normalized.x + transform.forward * movementInput.normalized.z;
-    }
-
-    public void Fly(Vector3 movementInput, bool ascendInput, bool descendInput)
-    {
-        Vector3 movementDirection = GetMovementDirection(movementInput);
-
-        if (ascendInput)
-        {
-            movementDirection += Vector3.up * flySpeed;
-        }
-        else if (descendInput)
-        {
-            movementDirection -= Vector3.up * flySpeed;
-        }
-        controller.Move(movementDirection * playerWalkSpeed * Time.deltaTime);
     }
 
     public void Walk(Vector3 movementInput, bool runningInput)
