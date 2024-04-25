@@ -9,6 +9,7 @@ public class DropLogic : MonoBehaviour
     public GameObject grassChild;
     public GameObject sandChild;
     public GameObject stoneChild;
+
     public InventoryManager inventoryManager;
 
     public Collider activeCollider;
