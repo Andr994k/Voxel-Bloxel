@@ -2,9 +2,13 @@
 using UnityEngine;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Collections.Generic;
+using UnityEngine.Rendering;
+using System;
 
 public static class SaveSystem
 {
+   void Update()
    public static void SavePlayer (Player player)
    {
         BinaryFormatter formatter = new BinaryFormatter();
@@ -16,6 +20,16 @@ public static class SaveSystem
         formatter.Serialize(stream, data);
         stream.Close();
    }
+
+   public static void SaveWorld (List<ChunkData> World)
+   {
+        BinaryFormatter formatter = new BinaryFormatter();
+        string path = Application.persistentDataPath + "/player.save";
+        FileStream stream = new FileStream(path, FileMode.Create);
+
+        formatter.Serialize(stream, World);
+        stream.Close();
+    }
 
     public static PlayerData LoadPlayer()
     {

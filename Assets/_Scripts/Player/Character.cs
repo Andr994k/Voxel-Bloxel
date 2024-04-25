@@ -80,7 +80,7 @@ public class Character : MonoBehaviour
     public List<Vector3Int> directionList = new List<Vector3Int> {Vector3Int.up, Vector3Int.down, Vector3Int.right, Vector3Int.left, Vector3Int.forward, Vector3Int.back};
 
     //List of all chunks that have been modified by the player, so that they can be saved
-    List<ChunkData> modifiedChunks;
+    [HideInInspector]public List<ChunkData> modifiedChunks;
 
 
     //Needed for foreach loop making a list of chunks that have been modified
@@ -209,6 +209,7 @@ public class Character : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.O))
         {
             makeModifiedChunksList();
+            SaveSystem.SaveWorld(modifiedChunks);
         }
 
 
