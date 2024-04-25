@@ -10,9 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 489a59b2bd7d15d458b4d2a8ac848b23, type: 3}
-  m_Name: BingChilling
+  m_Name: Sand
   m_EditorClassIdentifier: 
-  type: 0
-  actionType: 0
+  type: 10
   stackable: 1
   image: {fileID: 21300000, guid: b554e0519b498e64ba3a8c81cf9e6f41, type: 3}

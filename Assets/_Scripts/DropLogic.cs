@@ -21,62 +21,86 @@ public class DropLogic : MonoBehaviour
 
     public Item itemtype;
 
+    public string destroyedby;
+
+    [HideInInspector] public string droppedby;
+
 
     private void Awake()
     {
-        inventoryManager = GameObject.Find("ÏnventoryManager").GetComponent<InventoryManager>();
+        inventoryManager = GameObject.Find("InventoryManager").GetComponent<InventoryManager>();
 
         playerObject = GameObject.FindGameObjectWithTag("Player");
 
         playerCollider = playerObject.GetComponent<Collider>();
 
         Character character = playerObject.GetComponent<Character>();
+        if (destroyedby == "character")
+        {
+            BlockType block = character.currentDestroyedBlock;
+            if (block == BlockType.Stone)
+            {
+                stoneChild.SetActive(true);
+                activeCollider = stoneChild.GetComponent<Collider>();
+                activeBlock = BlockType.Stone;
+                itemtype = Resources.Load<Item>("Items/Stone");
+            }
+            if (block == BlockType.Sand)
+            {
+                sandChild.SetActive(true);
+                activeCollider = sandChild.GetComponent<Collider>();
+                activeBlock = BlockType.Stone;
+                itemtype = Resources.Load<Item>("Items/Sand");
+            }
+            if (block == BlockType.Dirt)
+            {
+                dirtChild.SetActive(true);
+                activeCollider = dirtChild.GetComponent<Collider>();
+                activeBlock = BlockType.Dirt;
+                itemtype = Resources.Load<Item>("Items/Dirt");
+            }
+            if (block == BlockType.Grass_Dirt)
+            {
+                grassChild.SetActive(true);
+                activeCollider = grassChild.GetComponent<Collider>();
+                activeBlock = BlockType.Grass_Dirt;
+                itemtype = Resources.Load<Item>("Items/Grass");
+            }
+        }
+        if (destroyedby == "Inv")
+        {
+            BlockType block = itemtype.type;
+            if (block == BlockType.Stone)
+            {
+                stoneChild.SetActive(true);
+                activeCollider = stoneChild.GetComponent<Collider>();
+                activeBlock = BlockType.Stone;
+                itemtype = Resources.Load<Item>("Items/Stone");
+            }
+            if (block == BlockType.Sand)
+            {
+                sandChild.SetActive(true);
+                activeCollider = sandChild.GetComponent<Collider>();
+                activeBlock = BlockType.Stone;
+                itemtype = Resources.Load<Item>("Items/Sand");
+            }
+            if (block == BlockType.Dirt)
+            {
+                dirtChild.SetActive(true);
+                activeCollider = dirtChild.GetComponent<Collider>();
+                activeBlock = BlockType.Dirt;
+                itemtype = Resources.Load<Item>("Items/Dirt");
+            }
+            if (block == BlockType.Grass_Dirt)
+            {
+                grassChild.SetActive(true);
+                activeCollider = grassChild.GetComponent<Collider>();
+                activeBlock = BlockType.Grass_Dirt;
+                itemtype = Resources.Load<Item>("Items/Grass");
+            }
+        }
 
-        BlockType block = character.currentDestroyedBlock;
-
-        if (block == BlockType.Stone)
-        {
-            stoneChild.SetActive(true);
-            activeCollider = stoneChild.GetComponent<Collider>();
-            activeBlock = BlockType.Stone;
-            itemtype = Resources.Load<Item>("Items/BingChilling");
-        }
-        if (block == BlockType.Sand)
-        {
-            sandChild.SetActive(true);
-            activeCollider = sandChild.GetComponent<Collider>();
-            activeBlock = BlockType.Stone;
-            itemtype = Resources.Load<Item>("Items/BingChilling");
-        }
-        if (block == BlockType.Dirt)
-        {
-            dirtChild.SetActive(true);
-            activeCollider = dirtChild.GetComponent<Collider>();
-            activeBlock = BlockType.Dirt;
-            itemtype = Resources.Load<Item>("Items/BingChilling");
-        }
-        if (block == BlockType.Grass_Dirt)
-        {
-            grassChild.SetActive(true);
-            activeCollider = grassChild.GetComponent<Collider>();
-            activeBlock = BlockType.Grass_Dirt;
-            itemtype = Resources.Load<Item>("Items/BingChilling");
-        }
-        if (block == BlockType.Dirt)
-        {
-            dirtChild.SetActive(true);
-            activeCollider = dirtChild.GetComponent<Collider>();
-        }
-        if (block == BlockType.Sand)
-        {
-            sandChild.SetActive(true);
-            activeCollider = sandChild.GetComponent<Collider>();
-        }
-        if (block == BlockType.Grass_Dirt)
-        {
-            grassChild.SetActive(true);
-            activeCollider = grassChild.GetComponent<Collider>();
-        }
+       
     }
     private void Update()
     {

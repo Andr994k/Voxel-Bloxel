@@ -436,6 +436,7 @@ public class Character : MonoBehaviour
                     StopAllCoroutines();
                     animator.SetBool("Mining", false);
                     Instantiate(dropBlockPrefab, hit.point, Quaternion.identity);
+                    
 
 
                     Destroy(xt1destroysprite);

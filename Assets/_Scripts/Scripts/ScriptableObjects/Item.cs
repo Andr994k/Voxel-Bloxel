@@ -5,8 +5,7 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Game/Item")]
 public class Item : ScriptableObject
 {
-    public ItemType type;
-    public ActionType actionType;
+    public BlockType type;
     
     public bool stackable = true;
 
@@ -15,14 +14,3 @@ public class Item : ScriptableObject
 
 }
 
-public enum ItemType
-{
-    Block,
-    Tool
-}
-
-public enum ActionType
-{
-    Dig,
-    Mine
-}

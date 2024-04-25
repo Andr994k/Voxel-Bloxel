@@ -1,11 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Burst.CompilerServices;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
 public class Background : MonoBehaviour, IDropHandler
 {
-   
+    [SerializeField] GameObject dropBlockPrefab;   
     public void OnDrop(PointerEventData eventData)
     {
         GameObject dropped = eventData.pointerDrag;
@@ -13,8 +14,8 @@ public class Background : MonoBehaviour, IDropHandler
         Destroy(dropped);
         for (int i = 0; i == draggableItem.CurrentCount; i ++)
         {
-            //instansiate block
+            Instantiate(dropBlockPrefab, gameObject.transform.position, Quaternion.identity);
         }
-        
+
     }
 }

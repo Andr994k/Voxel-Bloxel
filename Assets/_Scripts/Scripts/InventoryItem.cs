@@ -12,8 +12,7 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IEndDragHandler, 
     
     [HideInInspector]public int CurrentCount = 1;
 
-
-    [HideInInspector]public Item item;
+    [HideInInspector] public Item item;
     [HideInInspector] public Transform parentAfterDrag;
     public void OnBeginDrag(PointerEventData eventData)
     {
@@ -28,6 +27,7 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IEndDragHandler, 
     {
         item = newitem;
         image.sprite = newitem.image;
+
         RefreshCount();
     }
 
