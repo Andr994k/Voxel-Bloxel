@@ -129,7 +129,6 @@ public class World : MonoBehaviour
 
     internal void LoadAdditionalChunksRequest(GameObject player)
     {
-        Debug.Log("Load more chunks");
         GenerateWorld(Vector3Int.RoundToInt(player.transform.position));
         onNewChunksGenerated?.Invoke();
     }

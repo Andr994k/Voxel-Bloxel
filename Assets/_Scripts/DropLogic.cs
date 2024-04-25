@@ -22,7 +22,7 @@ public class DropLogic : MonoBehaviour
 
     public Item itemtype;
 
-    public string destroyedby;
+    public string destroyedBy;
 
     [HideInInspector] public string droppedby;
 
@@ -36,7 +36,7 @@ public class DropLogic : MonoBehaviour
         playerCollider = playerObject.GetComponent<Collider>();
 
         Character character = playerObject.GetComponent<Character>();
-        if (destroyedby == "character")
+        if (destroyedBy == "character")
         {
             BlockType block = character.currentDestroyedBlock;
             if (block == BlockType.Stone)
@@ -68,7 +68,7 @@ public class DropLogic : MonoBehaviour
                 itemtype = Resources.Load<Item>("Items/Grass");
             }
         }
-        if (destroyedby == "Inv")
+        if (destroyedBy == "Inv")
         {
             BlockType block = itemtype.type;
             if (block == BlockType.Stone)

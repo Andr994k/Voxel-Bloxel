@@ -19,7 +19,6 @@ public class StoneLayerHandler : BlockLayerHandler
             return false;
         }
         stoneNoiseSettings.worldOffset = mapSeedOffset;
-        //float stoneNoise = MyNoise.OctavePerlin(chunkData.worldPosition.x + x, chunkData.worldPosition.z + z, stoneNoiseSettings);
         float stoneNoise = domainWarping.GenerateDomainNoise(chunkData.worldPosition.x + x, chunkData.worldPosition.z + z, stoneNoiseSettings);
 
         int endPosition = surfaceHeightNoise;
