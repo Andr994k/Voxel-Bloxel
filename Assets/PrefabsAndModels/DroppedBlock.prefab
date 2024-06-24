@@ -131,7 +131,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.05, y: 0.05, z: 0.05}
+  m_Size: {x: 0.075, y: 0.075, z: 0.075}
   m_Center: {x: 0, y: -0.000000029802322, z: -0.000000014901161}
 --- !u!1 &898857831845934417
 GameObject:
@@ -264,7 +264,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.05, y: 0.05, z: 0.05}
+  m_Size: {x: 0.075, y: 0.075, z: 0.075}
   m_Center: {x: 0, y: -0.000000029802322, z: -0.000000014901161}
 --- !u!1 &1494586762304015873
 GameObject:
@@ -397,7 +397,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.05, y: 0.05, z: 0.05}
+  m_Size: {x: 0.075, y: 0.075, z: 0.075}
   m_Center: {x: 0, y: -0.000000029802322, z: -0.000000014901161}
 --- !u!1 &2267338915861215086
 GameObject:
@@ -530,7 +530,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.05, y: 0.05, z: 0.05}
+  m_Size: {x: 0.075, y: 0.075, z: 0.075}
   m_Center: {x: 0, y: -0.000000029802322, z: -0.000000014901161}
 --- !u!1 &2572873579539556902
 GameObject:
@@ -584,6 +584,11 @@ MonoBehaviour:
   grassChild: {fileID: 898857831845934417}
   sandChild: {fileID: 2267338915861215086}
   stoneChild: {fileID: 88633833073943863}
+  inventoryManager: {fileID: 0}
   activeCollider: {fileID: 0}
   playerObject: {fileID: 0}
   playerCollider: {fileID: 0}
+  activeBlock: 0
+  itemtype: {fileID: 0}
+  destroyedBy: character
+  droppedby: 

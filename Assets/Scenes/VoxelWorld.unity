@@ -2516,7 +2516,7 @@ MonoBehaviour:
   waterThreshold: 8
   biomeNoiseSettings: {fileID: 11400000, guid: 0855402eca75df34aba8a6b7716ad209, type: 2}
   domainWarping: {fileID: 944194517}
-  useDomainWarping: 0
+  useDomainWarping: 1
   startLayerHandler: {fileID: 637396236}
   additionalLayerHandlers:
   - {fileID: 1817155398}
